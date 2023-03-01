@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 function Register() {
   const [state, setState] = useState({
@@ -26,35 +27,35 @@ function Register() {
   //  conect with firebase
   const handlesubmit = (e) => {
     e.preventDefault();
-    // const { firstName, lastName, phone, email, address, message } = state;
-    console.log(state);
+    const { firstName, lastName, phone, email, address, message } = userData;
 
-    if (1) {
+    if (firstName && lastName && phone && email && address && message) {
       const res = fetch(
-        "http://localhost:5001/register",
+        "https://mechnix-default-rtdb.firebaseio.com//MechniX.json",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(state),
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            phone,
+            email,
+            address,
+            message,
+          }),
         }
       );
 
       if (res) {
-        setState({
-          name: "",
-          email: "",
-          password: "",
+        setUserData({
+          firstName: "",
+          lastName: "",
           phone: "",
+          email: "",
           address: "",
-          confirmedpassword: "",
-          VehicleNo: "",
-          Vehicletype: "",
-          VehicleMade: "",
-          VehicleModel: "",
-          Madeyear: "",
-          fueltype: "",
+          message: "",
         });
         alert("Data Stored");
       } else {
@@ -67,7 +68,7 @@ function Register() {
 
   return (
     <section className="hero-section">
-      <div className="register-container">
+      <div className="container">
         <div className="title">Registration</div>
         <form action="#" onSubmit={handlesubmit}>
           <div className="user__details">
@@ -170,6 +171,17 @@ function Register() {
               />
             </div>
             <div className="input__box">
+              <span className="details"> Vehicle Made </span>
+              <input
+                type="text"
+                name="VehicleMade"
+                placeholder="Honda"
+                required=""
+                onChange={handleonchange}
+                value={state.VehicleMade}
+              />
+            </div>
+            <div className="input__box">
               <span className="details"> Made Year </span>
               <input
                 type="text"
@@ -182,9 +194,6 @@ function Register() {
             </div>
           </div>
           <div className="fueltype__details">
-            <span className="fueltype__title">Select the fuel type</span>
-            <div className="category">
-            <div className="fueltype_radio">
             <input
               type="radio"
               name="fueltype"
@@ -193,12 +202,7 @@ function Register() {
               value="Petrol"
               checked={state.fueltype === "Petrol"}
             />
-              <label htmlFor="dot-1">
-                <span style={{ fontSize: "24px" }}>Petrol</span>
-              </label>
-              </div>
-              <div className="fueltype_radio">
-              <input
+            <input
               type="radio"
               name="fueltype"
               id="dot-2"
@@ -206,12 +210,7 @@ function Register() {
               value="Diesel"
               checked={state.fueltype === "Diesel"}
             />
-              <label htmlFor="dot-2">
-                <span style={{ fontSize: "24px" }}>Disel</span>
-              </label>
-              </div>
-              <div className="fueltype_radio">
-              <input
+            <input
               type="radio"
               name="fueltype"
               id="dot-3"
@@ -219,15 +218,33 @@ function Register() {
               value="Electrical"
               checked={state.fueltype === "Electrical"}
             />
+            <span className="fueltype__title">Select the fuel type</span>
+            <div className="category">
+              <label htmlFor="dot-1">
+                <span className="dot one" />
+                <span style={{ fontSize: "24px" }}>Petrol</span>
+              </label>
+              <label htmlFor="dot-2">
+                <span className="dot two" />
+                <span style={{ fontSize: "24px" }}>Disel</span>
+              </label>
               <label htmlFor="dot-3">
+                <span className="dot three" />
                 <span style={{ fontSize: "24px" }}>Electrical</span>
               </label>
-              </div>
             </div>
           </div>
           <button type="submit" className="reg-btn">
             <span>Register</span>
           </button>
+          <div className="navlink">
+            <span>
+              You have an Account.
+              <NavLink to="/login" className="reg-link">
+                Login here.
+              </NavLink>
+            </span>
+          </div>
         </form>
       </div>
     </section>
